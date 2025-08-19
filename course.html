@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Course • Detail</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="brand"><div class="logo">EL</div><div><div class="title" id="courseTitle">Course</div><div class="small">Course detail & lessons</div></div></div>
+    <nav class="nav">
+      <a href="index.html">Courses</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="course-wrap">
+    <section id="mainContent">
+      <div id="videoWrapper" class="card center">
+        <!-- iframe injected by JS -->
+      </div>
+
+      <h3 style="margin-top:14px">Lessons</h3>
+      <div id="lessonsList"></div>
+    </section>
+
+    <aside class="aside card">
+      <h4>Course Progress</h4>
+      <div class="progress" style="margin:12px 0"><i id="progressFill"></i></div>
+      <div id="progressText" class="small"></div>
+      <div style="margin-top:14px">
+        <button id="markAll" class="btn ghost">Mark All Complete</button>
+        <button id="resetAll" class="btn" style="margin-left:8px">Reset Progress</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer>Tip: progress saved in browser storage (localStorage)</footer>
+</div>
+
+<script src="app.js"></script>
+<script>
+const courseId = getQueryParam('id') || COURSES[0].id;
+const course = COURSES.find(c=>c.id===courseId);
+if(!course){ alert('Course not found'); location.href='index.html' }
+
+document.getElementById('courseTitle').innerText = course.title;
+const videoWrap = document.getElementById('videoWrapper');
+const firstVideo = course.lessons[0].videoId;
+videoWrap.innerHTML = `<iframe width="100%" height="360" src="https://www.youtube.com/embed/${firstVideo}" frameborder="0" allowfullscreen></iframe>`;
+
+const lessonsList = document.getElementById('lessonsList');
+function renderLessons(){
+  lessonsList.innerHTML = '';
+  const prog = readProgress();
+  const completed = (prog[courseId] && prog[courseId].completed) ? new Set(prog[courseId].completed) : new Set();
+  course.lessons.forEach(lesson=>{
+    const div = document.createElement('div'); div.className = 'lesson';
+    div.innerHTML = `<div class="meta">${lesson.title}</div>
+      <div>
+        <button class="mark" style="background:${completed.has(lesson.id)?'#16a34a':'#334155'};color:#fff" data-id="${lesson.id}">${completed.has(lesson.id)?'Completed':'Mark'}</button>
+        <button class="btn ghost" style="margin-left:8px" onclick="playVideo('${lesson.videoId}')">Play</button>
+      </div>`;
+    lessonsList.appendChild(div);
+  });
+
+  // attach listeners
+  document.querySelectorAll('.mark').forEach(btn=>{
+    btn.onclick = ()=>{
+      const lid = btn.dataset.id;
+      const isDone = btn.textContent==='Completed';
+      markLesson(courseId, lid, !isDone);
+      renderLessons();
+      updateProgressUI();
+    };
+  });
+}
+function playVideo(vid){
+  videoWrap.innerHTML = `<iframe width="100%" height="360" src="https://www.youtube.com/embed/${vid}" frameborder="0" allowfullscreen></iframe>`;
+}
+
+function updateProgressUI(){
+  const pct = completionPercent(courseId);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').innerText = pct + '% completed';
+}
+
+document.getElementById('markAll').onclick = ()=>{
+  course.lessons.forEach(l=>markLesson(courseId, l.id, true));
+  renderLessons(); updateProgressUI();
+};
+document.getElementById('resetAll').onclick = ()=>{
+  const p=readProgress(); p[courseId] = {completed:[]}; saveProgress(p);
+  renderLessons(); updateProgressUI();
+};
+
+renderLessons(); updateProgressUI();
+</script>
+</body>
+</html>
