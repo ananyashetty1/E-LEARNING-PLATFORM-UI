@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>E-Learning • Courses</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="brand"><div class="logo">EL</div><div><div class="title">E-Learning UI</div><div class="small">Interactive front-end • CODTECH</div></div></div>
+    <nav class="nav">
+      <a href="index.html">Courses</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Available Courses</h2>
+    <div id="courses" class="grid"></div>
+  </main>
+
+  <footer>Built for CODTECH Internship • Open for customization</footer>
+</div>
+
+<script src="app.js"></script>
+<script>
+const container = document.getElementById('courses');
+COURSES.forEach(c=>{
+  const el = document.createElement('div'); el.className = 'card';
+  el.innerHTML = `
+    <div class="thumb"><img src="${c.thumbnail||'https://via.placeholder.com/400x200?text=Course'}" style="width:100%;height:100%;object-fit:cover" alt=""></div>
+    <h3>${c.title}</h3>
+    <p>${c.desc}</p>
+    <div class="tags">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <div class="actions">
+      <a class="btn" href="course.html?id=${c.id}">View Course</a>
+      <button class="btn ghost" onclick="alert('Preview not implemented')">Preview</button>
+    </div>
+  `;
+  container.appendChild(el);
+});
+</script>
+</body>
+</html>
