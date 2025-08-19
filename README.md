@@ -24,3 +24,4 @@ This project demonstrates how front-end development can directly impact the qual
 In conclusion, this project successfully delivers a styled and interactive multi-page interface for an e-learning platform. With features like course listing, progress tracking, and video embedding, the platform provides a modern and effective digital learning environment. The skills applied in this project—front-end coding, responsive design, and UI/UX thinking—are directly relevant to real-world applications in education technology, making it a valuable and practical internship task.
 #output
 <img width="1800" height="804" alt="Image" src="https://github.com/user-attachments/assets/cfabd136-bfd3-4f14-8f4f-61ee712b9139" />
+<img width="1846" height="842" alt="Image" src="https://github.com/user-attachments/assets/68936ca7-59f5-486e-ad82-35ad3e8320ef" />
