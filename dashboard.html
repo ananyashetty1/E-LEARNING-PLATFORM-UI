@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard • Progress</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="brand"><div class="logo">EL</div><div><div class="title">Student Dashboard</div><div class="small">Progress & summaries</div></div></div>
+    <nav class="nav">
+      <a href="index.html">Courses</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Your Progress</h2>
+    <div id="kpis" class="kpi"></div>
+  </main>
+
+  <footer>Progress is stored locally in your browser. Clear site data to reset.</footer>
+</div>
+
+<script src="app.js"></script>
+<script>
+const kpi = document.getElementById('kpis');
+const progress = readProgress();
+COURSES.forEach(c=>{
+  const pct = completionPercent(c.id);
+  const box = document.createElement('div'); box.className='box';
+  box.innerHTML = `<h3>${c.title}</h3><div class="small">${pct}% complete</div>
+    <div class="progress" style="margin-top:8px"><i style="width:${pct}%"></i></div>
+    <div style="margin-top:10px"><a class="btn" href="course.html?id=${c.id}">Continue</a></div>`;
+  kpi.appendChild(box);
+});
+</script>
+</body>
+</html>
